@@ -4,12 +4,12 @@
   In a real environment (Webpack / Browserify, ES6) this would be:
     import { Tab, Tabs } from 'react-bootstrap';
 */
+import React from 'react';
 import { Accordion, PageHeader, 
      Panel, Jumbotron, 
      ListGroup, ListGroupItem, 
      Button, Modal,
-     FormGroup, FormControl, ControlLabel,
-     HelpBlock } from 'react-bootstrap';
+     FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 /* 
 let { Accordion, PageHeader, 
@@ -74,13 +74,12 @@ class RecipeBoxHeader extends React.Component {
 }
 
 class RecipeBoxBody extends React.Component {
-  
-  
+
   render() {
     console.log(this.props.recipes)
    const _recipePanels = this.props.recipes.map((ele, index) => {
       return (
-         <Panel header={ele.title} bsStyle="success" eventKey={index+1}>
+         <Panel header={ele.title} bsStyle="success" key={index.toString()} eventKey={index+1}>
             <RecipeBody ingredients={ele.ingredients} />
             <RecipeFooter />
          </Panel>
@@ -194,7 +193,7 @@ class RecipeBody extends React.Component {
   render() {
       var ingredientsList = this.props.ingredients.map((ele) => {
         return (
-          <ListGroupItem>{ele}</ListGroupItem>
+          <ListGroupItem key={ele}>{ele}</ListGroupItem>
         )
       })
       
@@ -221,12 +220,6 @@ class RecipeFooter extends React.Component {
   }
 }
 
-var myRecipes = [{
-      title: "Jam Sandwich",
-      ingredients: ["White sliced bread", "Jam"]
-    }, {
-      title: "Chocolate Brownies",
-      ingredients: ["3 Eggs", "250g Plain Flour", "2tbsp Bicarbinate of soda", "800g Cocca powder"]
-}];
+export default RecipeBox;
 
-ReactDOM.render(<RecipeBox recipes={myRecipes} />, content)
+// ReactDOM.render(<RecipeBox recipes={myRecipes} />, content)
