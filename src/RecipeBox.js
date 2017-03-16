@@ -221,5 +221,3 @@ class RecipeFooter extends React.Component {
 }
 
 export default RecipeBox;
-
-// ReactDOM.render(<RecipeBox recipes={myRecipes} />, content)
