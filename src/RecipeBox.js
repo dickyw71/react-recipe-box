@@ -24,19 +24,22 @@ class RecipeBox extends React.Component {
   
   constructor(props) {
     super(props);
-    // check if data in localStorage
-    let recipesStr = localStorage.getItem("_dickyw71_recipes");
-    if(recipesStr) {
-      this.state = ( {
-        recipes: JSON.parse(recipesStr)
-      })
+    if(window.localStorage) {
+      // check if data in localStorage
+      let recipesStr = localStorage.getItem("_dickyw71_recipes");
+      if(recipesStr) {
+        this.state = ( {
+          recipes: JSON.parse(recipesStr)
+        })
+      }
+      else {
+        localStorage.setItem("_dickyw71_recipes", JSON.stringify(this.props.recipes)); 
+      } 
     }
-    else {
-      this.state = ( {
+    this.state = ( {
         recipes: this.props.recipes
-      })
-      localStorage.setItem("_dickyw71_recipes", JSON.stringify(this.props.recipes)); 
-    } 
+    })
+
     this.add = this.add.bind(this);   
   }
   
@@ -48,8 +51,9 @@ class RecipeBox extends React.Component {
         recipes: _recipes
       }
     })
-    localStorage.setItem("_dickyw71_recipes", JSON.stringify(this.state.recipes));
- 
+    if(window.localStorage) {
+      localStorage.setItem("_dickyw71_recipes", JSON.stringify(this.state.recipes)); 
+    }
   }
   
   render() {
