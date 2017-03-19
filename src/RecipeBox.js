@@ -41,6 +41,7 @@ class RecipeBox extends React.Component {
     })
 
     this.add = this.add.bind(this);   
+    this.delete = this.delete.bind(this);
   }
   
   add(recipe) {
@@ -55,13 +56,27 @@ class RecipeBox extends React.Component {
       localStorage.setItem("_dickyw71_recipes", JSON.stringify(this.state.recipes)); 
     }
   }
+
+  delete(recipeTitle) {
+    let _recipes = this.state.recipes.filter((ele) => {
+      return ele.title !== recipeTitle;
+    })
+    this.setState((prevState) => {
+      return {
+        recipes: _recipes
+      }
+    })
+    if(window.localStorage) {
+      localStorage.setItem("_dickyw71_recipes", JSON.stringify(this.state.recipes)); 
+    }  
+  }
   
   render() {
     
     return (
       <div>
         <RecipeBoxHeader />
-        <RecipeBoxBody recipes={this.state.recipes} />
+        <RecipeBoxBody recipes={this.state.recipes} deleteRecipe={this.delete} />
         <AddRecipeButton addRecipe={this.add}/>
       </div>  
     )
@@ -85,7 +100,7 @@ class RecipeBoxBody extends React.Component {
       return (
          <Panel header={ele.title} bsStyle="success" key={index.toString()} eventKey={index+1}>
             <RecipeBody ingredients={ele.ingredients} />
-            <RecipeFooter />
+            <RecipeFooter delete={this.props.deleteRecipe} recipeTitle={ele.title} />
          </Panel>
         )
     })
@@ -209,11 +224,20 @@ class RecipeBody extends React.Component {
 }
 
 class RecipeFooter extends React.Component {
-  
+  constructor(props) {
+    super(props);
+
+    this.deleteRecipe = this.deleteRecipe.bind(this);
+  }
+
+  deleteRecipe() {
+    this.props.delete(this.props.recipeTitle);
+  }
+
   render() {
     return (
       <div>
-        <Button bsStyle="danger">Delete</Button>
+        <Button bsStyle="danger" onClick={this.deleteRecipe}>Delete</Button>
         <Button bsStyle="default">Edit</Button>     
       </div>  
       )
