@@ -117,7 +117,11 @@ class AddRecipeButton extends React.Component {
   }  
   
   open() {
-    this.setState( { showModal: true } );    
+    this.setState( { 
+      showModal: true,
+      title: "", 
+      ingredients: "" 
+    });    
   }
   close() {
     this.setState( { showModal: false } );
@@ -138,18 +142,10 @@ class AddRecipeButton extends React.Component {
   
   addRecipe() {
     this.close();  
-    if(this.state.title.trim().length > 0) {
-      //  Don't add an empty recipe title string
-      this.setState( { title: "Untitled" } );
-    }
     this.props.addRecipe({ 
-          title: this.state.title, 
+          title: this.state.title || "Untitled", 
           ingredients: this.state.ingredients.split(",") 
-   });
-   this.setState( { 
-       title: "", 
-       ingredients: ""
-   });   
+   }); 
   }
   
   render() {
