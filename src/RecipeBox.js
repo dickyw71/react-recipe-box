@@ -42,6 +42,7 @@ class RecipeBox extends React.Component {
 
     this.add = this.add.bind(this);   
     this.delete = this.delete.bind(this);
+    this.edit = this.edit.bind(this);
   }
   
   add(recipe) {
@@ -71,12 +72,29 @@ class RecipeBox extends React.Component {
     }  
   }
   
+  edit(recipe) {
+   let _recipes = this.state.recipes.map((ele) => {
+      if (ele.title === recipe.title) {
+        ele.ingredients = recipe.ingredients;
+      }
+      return ele;
+    })
+    this.setState((prevState) => {
+      return {
+        recipes: _recipes
+      }
+    })
+    if(window.localStorage) {
+      localStorage.setItem("_dickyw71_recipes", JSON.stringify(this.state.recipes)); 
+    }  
+  }
+
   render() {
     
     return (
       <div>
         <RecipeBoxHeader />
-        <RecipeBoxBody recipes={this.state.recipes} deleteRecipe={this.delete} />
+        <RecipeBoxBody recipes={this.state.recipes} deleteRecipe={this.delete} editRecipe={this.edit} />
         <AddRecipeButton addRecipe={this.add}/>
       </div>  
     )
@@ -100,7 +118,7 @@ class RecipeBoxBody extends React.Component {
       return (
          <Panel header={ele.title} bsStyle="success" key={index.toString()} eventKey={index+1}>
             <RecipeBody ingredients={ele.ingredients} />
-            <RecipeFooter delete={this.props.deleteRecipe} recipeTitle={ele.title} />
+            <RecipeFooter delete={this.props.deleteRecipe} edit={this.props.editRecipe} recipe={ele} />
          </Panel>
         )
     })
@@ -226,21 +244,91 @@ class RecipeBody extends React.Component {
 class RecipeFooter extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+        showModal: false,
+        title: this.props.recipe.title,
+        ingredients: this.props.recipe.ingredients    
+    }
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);  
+    this.handleIngredientsChange = this.handleIngredientsChange.bind(this);
+    this.cancel = this.cancel.bind(this);   
+    this.editRecipe = this.editRecipe.bind(this);    
     this.deleteRecipe = this.deleteRecipe.bind(this);
   }
 
+  open() {
+    this.setState( {  showModal: true });    
+  }
+  close() {
+    this.setState( { showModal: false } );
+  }
+  
+  handleTitleChange(e) {
+    this.setState( { title: e.target.value } );  
+  }
+ 
+  handleIngredientsChange(e) {
+    this.setState( { ingredients: e.target.value } );
+  }
+  
+  cancel() {
+    this.close();
+    this.setState( { 
+      title: this.props.recipe.title, 
+      ingredients: this.props.recipe.ingredients } );
+  }
+
+  editRecipe() {
+    this.close();
+    this.props.edit({ 
+          title: this.state.title || "Untitled", 
+          ingredients: this.state.ingredients.split(",") 
+   }); 
+  }
+
   deleteRecipe() {
-    this.props.delete(this.props.recipeTitle);
+    this.props.delete(this.props.recipe.title);
   }
 
   render() {
     return (
       <div>
         <Button bsStyle="danger" onClick={this.deleteRecipe}>Delete</Button>
-        <Button bsStyle="default">Edit</Button>     
-      </div>  
-      )
+             <Button bsStyle="default" onClick={this.open}>
+        Edit
+      </Button>
+      <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Recipe</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FormGroup>
+              <ControlLabel>Title</ControlLabel>
+              <FormControl type="text"
+                value={this.state.title}
+                placeholder="Enter a recipe title"
+                onChange={this.handleTitleChange}
+              />
+            </FormGroup>  
+            <FormGroup> 
+              <ControlLabel>Ingredients</ControlLabel>
+              <FormControl type="ingredients"
+                componentClass="textarea"
+                value={this.state.ingredients}
+                placeholder="Enter ingredients, seperated by commas"
+                onChange={this.handleIngredientsChange}
+              />
+            </FormGroup>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.editRecipe} bsStyle="primary">Edit Recipe</Button>
+            <Button onClick={this.cancel}>Cancel</Button>
+          </Modal.Footer>   
+      </Modal>   
+    </div>  
+    )
   }
 }
 
