@@ -8,16 +8,16 @@ import React from 'react';
 import { Accordion, PageHeader, 
      Panel, Jumbotron, 
      ListGroup, ListGroupItem, 
-     Button, Modal,
+     Button, ButtonToolbar, Modal,
      FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 /* 
 let { Accordion, PageHeader, 
      Panel, Jumbotron, 
      ListGroup, ListGroupItem, 
-     Button, Modal,
+     Button, ButtonToolbar, Modal,
      FormGroup, FormControl, ControlLabel,
-     HelpBlock } = ReactBootstrap;
+   } = ReactBootstrap;
 */
 
 class RecipeBox extends React.Component {
@@ -294,11 +294,13 @@ class RecipeFooter extends React.Component {
 
   render() {
     return (
-      <div>
-        <Button bsStyle="danger" onClick={this.deleteRecipe}>Delete</Button>
-             <Button bsStyle="default" onClick={this.open}>
-        Edit
-      </Button>
+      <ButtonToolbar>
+        <Button bsStyle="danger" onClick={this.deleteRecipe}>
+          Delete
+        </Button>
+        <Button bsStyle="default" onClick={this.open}>
+          Edit
+        </Button>
       <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
             <Modal.Title>Edit Recipe</Modal.Title>
@@ -327,7 +329,7 @@ class RecipeFooter extends React.Component {
             <Button onClick={this.cancel}>Cancel</Button>
           </Modal.Footer>   
       </Modal>   
-    </div>  
+    </ButtonToolbar>  
     )
   }
 }
