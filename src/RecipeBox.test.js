@@ -13,6 +13,7 @@ var myRecipes = [{
       ingredients: ["3 Eggs", "250g Plain Flour", "2tbsp Bicarbinate of soda", "800g Cocca powder"]
 }];
 
+let notRecipes = "purple rain";
 /**
  * RecipeBox tests
  */
@@ -21,4 +22,12 @@ it('renders without crashing', () => {
   ReactDOM.render(<RecipeBox recipes={myRecipes} />, div);
 });
 
+xit('warns when recipes is not array of objects', () => {
+  const div = document.createElement('div');
+  ReactDOM.render(<RecipeBox recipes={notRecipes} />, div);  
+});
 
+it('uses default props when none are supplied', () => {
+  const div = document.createElement('div');
+  ReactDOM.render(<RecipeBox />, div);  
+});
