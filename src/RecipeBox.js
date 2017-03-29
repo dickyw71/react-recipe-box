@@ -20,8 +20,7 @@ let { Accordion, PageHeader,
    } = ReactBootstrap;
 */
 
-class RecipeBox extends React.Component {
-  
+class RecipeBox extends React.Component {  
   constructor(props) {
     super(props);
     if(window.localStorage) {
@@ -100,6 +99,19 @@ class RecipeBox extends React.Component {
     )
   }
 }
+RecipeBox.defaultProps = {
+  recipes: [{
+      title: "Jam Sandwich",
+      ingredients: ["White sliced bread", "Strawberry Jam"]
+    }, {
+      title: "Chocolate Brownies",
+      ingredients: ["3 Eggs", "250g Plain Flour", "2tbsp Bicarbinate of soda", "800g Cocca powder"]
+  }]
+};
+
+RecipeBox.propTypes = {
+  recipes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+};
 
 
 class RecipeBoxHeader extends React.Component {
@@ -113,7 +125,6 @@ class RecipeBoxHeader extends React.Component {
 class RecipeBoxBody extends React.Component {
 
   render() {
-    console.log(this.props.recipes)
    const _recipePanels = this.props.recipes.map((ele, index) => {
       return (
          <Panel header={ele.title} bsStyle="success" key={index.toString()} eventKey={index+1}>
